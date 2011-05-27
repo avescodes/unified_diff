@@ -1,7 +1,11 @@
 require 'helper'
 
-class TestDiffParser < Test::Unit::TestCase
-  should "probably rename this file and start testing for real" do
-    flunk "hey buddy, you should probably rename this file and start testing for real"
+class TestDiffParser < MiniTest::Unit::TestCase
+  def setup
+    @parser = DiffParser.new
+  end
+
+  def test_setup_method
+    assert_equal DiffParser, @parser.class
   end
 end
