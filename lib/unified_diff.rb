@@ -1,0 +1,3 @@
+class UnifiedDiff
+
+end

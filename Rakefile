@@ -14,11 +14,11 @@ require 'rake'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "diff_parser"
-  gem.homepage = "http://github.com/rkneufeld/diff_parser"
+  gem.name = "unified_diff"
+  gem.homepage = "http://github.com/rkneufeld/unified_diff"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Parse unified diffs in style}
+  gem.description = %Q{unified_diff parses unified diff contents into easy-to-use Ruby objects}
   gem.email = "ryan@ryanneufeld.ca"
   gem.authors = ["Ryan Neufeld"]
   # dependencies defined in Gemfile
@@ -39,7 +39,7 @@ Rake::RDocTask.new do |rdoc|
   version = File.exist?('VERSION') ? File.read('VERSION') : ""
 
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "diff_parser #{version}"
+  rdoc.title = "unified_diff #{version}"
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
