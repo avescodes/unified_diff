@@ -12,9 +12,9 @@ module UnifiedDiff
     # if pattern is X,Y then $3 = X,Y, $4 = X, $5 = Y
     # if pattern is X   then $3 = X
     CHUNK_PATTERN =     /@@ -(\d+),(\d+) \+((\d+),(\d+)|(\d+)) @@/ 
-    ADDED_PATTERN =     /\+(.*)/
-    REMOVED_PATTERN =   /-(.*)/
-    UNCHANGED_PATTERN = / (.*)/
+    ADDED_PATTERN =     /^\+(.*)/
+    REMOVED_PATTERN =   /^-(.*)/
+    UNCHANGED_PATTERN = /^ (.*)/
 
     # Create and parse a unified diff
     #
