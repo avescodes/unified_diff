@@ -1,6 +1,10 @@
 = unified_diff
 
-Description goes here.
+unified_diff is a simple library to parse unified diffs into clean ruby objects. 
+
+Simply UnifiedDiff.parse(diff_contents) and you'll get back a Diff object with metadata from your diff as well as a list of chunks accesible via Diff#chunks.
+
+More features to follow.
 
 == Contributing to unified_diff
  

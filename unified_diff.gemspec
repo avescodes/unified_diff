@@ -29,7 +29,8 @@ Gem::Specification.new do |s|
     "lib/unified_diff/diff.rb",
     "test/helper.rb",
     "test/test_chunk.rb",
-    "test/test_unified_diff.rb"
+    "test/test_unified_diff.rb",
+    "unified_diff.gemspec"
   ]
   s.homepage = %q{http://github.com/rkneufeld/unified_diff}
   s.licenses = [%q{MIT}]
