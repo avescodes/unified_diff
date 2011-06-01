@@ -5,10 +5,10 @@
 
 Gem::Specification.new do |s|
   s.name = %q{unified_diff}
-  s.version = "0.2.0"
+  s.version = "0.3.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = [%q{Ryan Neufeld}]
+  s.authors = ["Ryan Neufeld"]
   s.date = %q{2011-06-01}
   s.description = %q{unified_diff parses unified diff contents into easy-to-use Ruby objects}
   s.email = %q{ryan@ryanneufeld.ca}
@@ -33,9 +33,9 @@ Gem::Specification.new do |s|
     "unified_diff.gemspec"
   ]
   s.homepage = %q{http://github.com/rkneufeld/unified_diff}
-  s.licenses = [%q{MIT}]
-  s.require_paths = [%q{lib}]
-  s.rubygems_version = %q{1.8.4}
+  s.licenses = ["MIT"]
+  s.require_paths = ["lib"]
+  s.rubygems_version = %q{1.6.2}
   s.summary = %q{Parse unified diffs in style}
 
   if s.respond_to? :specification_version then
