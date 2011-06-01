@@ -2,23 +2,22 @@ require 'time'
 module UnifiedDiff
   class Diff
     attr_reader :original, :old_file, :old_timestamp, :new_file, :new_timestamp, :chunks
+    class UnifiedDiffException < Exception; end
 
-    FILE_PATTERN = /(.*)\t'{2}?(.*)'{2}?/
-      OLD_FILE_PATTERN = /--- #{FILE_PATTERN}/
-      NEW_FILE_PATTERN = /\+\+\+ #{FILE_PATTERN}/
-      CHUNK_PATTERN = /@@ -(\d+),(\d+) \+(\d+),(\d+) @@/
-      ADDED_PATTERN = /\+(.*)/
-      REMOVED_PATTERN = /-(.*)/
-      UNCHANGED_PATTERN = / (.*)/
+    FILE_PATTERN =      /(.*)\t'{2}?(.*)'{2}?/
+    OLD_FILE_PATTERN =  /--- #{FILE_PATTERN}/
+    NEW_FILE_PATTERN =  /\+\+\+ #{FILE_PATTERN}/
+    CHUNK_PATTERN =     /@@ -(\d+),(\d+) \+(\d+),(\d+) @@/
+    ADDED_PATTERN =     /\+(.*)/
+    REMOVED_PATTERN =   /-(.*)/
+    UNCHANGED_PATTERN = / (.*)/
 
-      TIMESTAMP_FORMAT = 
+    def initialize(diff)
+      @original = diff
+      parse
+    end
 
-      def initialize(diff)
-        @original = diff
-        parse
-      end
-
-    private
+  private
 
     def parse
       @chunks = []
@@ -38,7 +37,7 @@ module UnifiedDiff
         when UNCHANGED_PATTERN
           @working_chunk.insert_unchanged($1)
         else
-          raise "Unknown Line Type for Line: #{line}"
+          raise UnifiedDiffException.new("Unknown Line Type for Line:\n#{line}")
         end
       end
     end

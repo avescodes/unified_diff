@@ -52,6 +52,16 @@ class TestUnifiedDiff < MiniTest::Unit::TestCase
     #assert_equal [3, 'Baz'], @chunk.added.first
   end
 
+  def test_raises_on_invalid_line
+    diff = <<-DIFF.unindent
+      --- old.txt	2011-05-31 11:14:13.000000000 -0500
+      +++ new.txt	2011-05-31 11:14:44.000000000 -0500
+      @@ -1,1 +1,1 @@
+      &foo
+    DIFF
+    assert_raises(UnifiedDiff::Diff::UnifiedDiffException) { UnifiedDiff.parse(diff) }
+  end
+
   def test_parses_multiple_chunks
     diff = <<-DIFF.unindent
       --- old.txt	2011-05-31 11:14:13.000000000 -0500
