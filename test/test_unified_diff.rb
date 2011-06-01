@@ -3,8 +3,8 @@ require 'helper'
 class TestUnifiedDiff < MiniTest::Unit::TestCase
   def setup
     diff = <<-DIFF.unindent
-      --- old.txt	2011-05-31 11:14:13.000000000 -0500
-      +++ new.txt	2011-05-31 11:14:44.000000000 -0500
+      --- original.txt	2011-05-31 11:14:13.000000000 -0500
+      +++ modified.txt	2011-05-31 11:14:44.000000000 -0500
       @@ -1,5 +1,5 @@
        foo
        bar
@@ -20,20 +20,20 @@ class TestUnifiedDiff < MiniTest::Unit::TestCase
     assert_equal UnifiedDiff::Diff, @diff.class
   end
 
-  def test_parses_old_information
-    assert_equal "old.txt", @diff.old_file
-    assert_equal Time.parse('2011-05-31 11:14:13.000000000 -0500'), @diff.old_timestamp
+  def test_parses_original_information
+    assert_equal "original.txt", @diff.original_file
+    assert_equal Time.parse('2011-05-31 11:14:13.000000000 -0500'), @diff.original_timestamp
   end
 
-  def test_parses_new_filename
-    assert_equal "new.txt", @diff.new_file
-    assert_equal Time.parse('2011-05-31 11:14:44.000000000 -0500'), @diff.new_timestamp
+  def test_parses_modified_filename
+    assert_equal "modified.txt", @diff.modified_file
+    assert_equal Time.parse('2011-05-31 11:14:44.000000000 -0500'), @diff.modified_timestamp
   end
 
   def test_parses_chunk_header
     @chunk = @diff.chunks.first
-    assert_equal (1..5), @chunk.old_range
-    assert_equal (1..5), @chunk.new_range
+    assert_equal (1..5), @chunk.original_range
+    assert_equal (1..5), @chunk.modified_range
   end
 
   def test_parses_unchanged_line
@@ -54,8 +54,8 @@ class TestUnifiedDiff < MiniTest::Unit::TestCase
 
   def test_raises_on_invalid_line
     diff = <<-DIFF.unindent
-      --- old.txt	2011-05-31 11:14:13.000000000 -0500
-      +++ new.txt	2011-05-31 11:14:44.000000000 -0500
+      --- original.txt	2011-05-31 11:14:13.000000000 -0500
+      +++ modified.txt	2011-05-31 11:14:44.000000000 -0500
       @@ -1,1 +1,1 @@
       &foo
     DIFF
@@ -64,8 +64,8 @@ class TestUnifiedDiff < MiniTest::Unit::TestCase
 
   def test_parses_multiple_chunks
     diff = <<-DIFF.unindent
-      --- old.txt	2011-05-31 11:14:13.000000000 -0500
-      +++ new.txt	2011-05-31 11:14:44.000000000 -0500
+      --- original.txt	2011-05-31 11:14:13.000000000 -0500
+      +++ modified.txt	2011-05-31 11:14:44.000000000 -0500
       @@ -1,1 +1,1 @@
        -foo
        +bar
