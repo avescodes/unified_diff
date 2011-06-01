@@ -2,7 +2,7 @@ require 'helper'
 
 class TestUnifiedDiff < MiniTest::Unit::TestCase
   def setup
-    diff = <<-DIFF.unindent
+    @original = <<-DIFF.unindent
       --- original.txt	2011-05-31 11:14:13.000000000 -0500
       +++ modified.txt	2011-05-31 11:14:44.000000000 -0500
       @@ -1,5 +1,5 @@
@@ -13,7 +13,7 @@ class TestUnifiedDiff < MiniTest::Unit::TestCase
        qux
        quux
     DIFF
-    @diff = UnifiedDiff.parse(diff)
+    @diff = UnifiedDiff.parse(@original)
   end
 
   def test_setup_method_does_something
@@ -32,8 +32,21 @@ class TestUnifiedDiff < MiniTest::Unit::TestCase
 
   def test_parses_chunk_header
     @chunk = @diff.chunks.first
-    assert_equal (1..5), @chunk.original_range
-    assert_equal (1..5), @chunk.modified_range
+    assert_equal (1...6), @chunk.original_range
+    assert_equal (1...6), @chunk.modified_range
+  end
+
+  def test_parses_chunk_header_length_properly
+    diff = <<-DIFF.unindent
+      --- original.txt	2011-05-31 11:14:13.000000000 -0500
+      +++ modified.txt	2011-05-31 11:14:44.000000000 -0500
+      @@ -2,5 +3,5 @@
+       foo
+     DIFF
+     @diff = UnifiedDiff.parse(diff)
+     @chunk = @diff.chunks.first
+     assert_equal (2...7), @chunk.original_range
+     assert_equal (3...8), @chunk.modified_range
   end
 
   def test_parses_unchanged_line
@@ -75,5 +88,9 @@ class TestUnifiedDiff < MiniTest::Unit::TestCase
     DIFF
     @diff = UnifiedDiff.parse(diff)
     assert_equal 2, @diff.chunks.length
+  end
+
+  def test_to_s
+    assert_equal @original, @diff.to_s
   end
 end

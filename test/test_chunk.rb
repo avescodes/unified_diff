@@ -42,4 +42,13 @@ class TestChunk < MiniTest::Unit::TestCase
     @chunk.send(:insert_unchanged, 'bar')
     assert_equal ['foo'], @chunk.added_lines
   end
+
+  def test_to_s
+    @chunk.send(:insert_addition,'foo')
+    to_s = <<-TO_S.unindent
+      @@ -1,2 +1,3 @@
+      +foo
+    TO_S
+    assert_equal to_s, @chunk.to_s
+  end
 end

@@ -13,6 +13,18 @@ module UnifiedDiff
     end
 
 
+    # Render the chunk as it appeared in the original unified diff
+    #
+    # @return [String] the chunk as it appeared in the original unified diff
+    def to_s
+      "@@ "+
+        "-#{@original_range.begin},#{@original_range.count} " +
+        "+#{@modified_range.begin},#{@modified_range.count} " +
+      "@@\n" +
+      @raw_lines.join("\n") +
+      "\n"
+    end
+
     # Return an array of lines that were removed from the original version of the chunk
     #
     # @return [Array] the lines that were removed from the original

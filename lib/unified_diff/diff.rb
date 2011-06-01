@@ -12,9 +12,20 @@ module UnifiedDiff
     REMOVED_PATTERN =   /-(.*)/
     UNCHANGED_PATTERN = / (.*)/
 
+    # Create and parse a unified diff
+    #
+    # @param [String] a string containing a unified diff
+    # @return [Diff] the parsed diff
     def initialize(diff)
       @original = diff
       parse
+    end
+
+    # Render the diff as it appeared originally
+    #
+    # @return [String] the original unified diff
+    def to_s
+      @original
     end
 
   private
@@ -28,7 +39,11 @@ module UnifiedDiff
         when NEW_FILE_PATTERN
           @modified_file, @modified_timestamp = $1, Time.parse($2)
         when CHUNK_PATTERN
-          @working_chunk = Chunk.new(original: ($1.to_i..$2.to_i), modified: ($3.to_i..$4.to_i))
+          old_begin = $1.to_i
+          old_end = old_begin + $2.to_i
+          new_begin = $3.to_i
+          new_end = new_begin + $4.to_i
+          @working_chunk = Chunk.new(original: (old_begin...old_end), modified: (new_begin...new_end))
           @chunks << @working_chunk
         when ADDED_PATTERN
           @working_chunk.send(:insert_addition, $1)
