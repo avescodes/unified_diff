@@ -93,4 +93,16 @@ class TestUnifiedDiff < MiniTest::Unit::TestCase
   def test_to_s
     assert_equal @original, @diff.to_s
   end
+
+  def test_handles_one_element_chunk_range
+    diff = <<-DIFF.unindent
+      --- /tmp/old.txt	2011-06-01 14:18:37.000000000 -0500
+      +++ /tmp/new.txt	2011-06-01 14:18:38.000000000 -0500
+      @@ -0,0 +1 @@
+      +   IFrame
+    DIFF
+    @diff = UnifiedDiff.parse(diff)
+    @chunk = @diff.chunks.first
+    assert_equal (1...2), @chunk.modified_range
+  end
 end

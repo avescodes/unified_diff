@@ -7,7 +7,11 @@ module UnifiedDiff
     FILE_PATTERN =      /(.*)\t'{2}?(.*)'{2}?/
     OLD_FILE_PATTERN =  /--- #{FILE_PATTERN}/
     NEW_FILE_PATTERN =  /\+\+\+ #{FILE_PATTERN}/
-    CHUNK_PATTERN =     /@@ -(\d+),(\d+) \+(\d+),(\d+) @@/
+    # Match assignment is tricky for CHUNK_PATTERN
+    # $1,$2 are static, but $3,$4,$5 vary
+    # if pattern is X,Y then $3 = X,Y, $4 = X, $5 = Y
+    # if pattern is X   then $3 = X
+    CHUNK_PATTERN =     /@@ -(\d+),(\d+) \+((\d+),(\d+)|(\d+)) @@/ 
     ADDED_PATTERN =     /\+(.*)/
     REMOVED_PATTERN =   /-(.*)/
     UNCHANGED_PATTERN = / (.*)/
@@ -41,8 +45,13 @@ module UnifiedDiff
         when CHUNK_PATTERN
           old_begin = $1.to_i
           old_end = old_begin + $2.to_i
-          new_begin = $3.to_i
-          new_end = new_begin + $4.to_i
+          if $3.include?(',') # Will match if non-edge case encountered
+            new_begin = $4.to_i
+            new_end = new_begin + $5.to_i
+          else
+            new_begin = $3.to_i
+            new_end = new_begin + 1
+          end
           @working_chunk = Chunk.new(original: (old_begin...old_end), modified: (new_begin...new_end))
           @chunks << @working_chunk
         when ADDED_PATTERN
