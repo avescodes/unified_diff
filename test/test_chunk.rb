@@ -30,4 +30,16 @@ class TestChunk < MiniTest::Unit::TestCase
     @chunk.send(:insert_addition,"baz")
     assert_equal %w{foo baz}, @chunk.modified_lines
   end
+
+  def test_removed_lines
+    @chunk.send(:insert_removal,'foo')
+    @chunk.send(:insert_unchanged, 'bar')
+    assert_equal ['foo'], @chunk.removed_lines
+  end
+
+  def test_added_lines
+    @chunk.send(:insert_addition,'foo')
+    @chunk.send(:insert_unchanged, 'bar')
+    assert_equal ['foo'], @chunk.added_lines
+  end
 end

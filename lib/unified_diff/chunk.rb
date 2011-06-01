@@ -12,22 +12,40 @@ module UnifiedDiff
       @raw_lines = []
     end
 
-   
+
+    # Return an array of lines that were removed from the original version of the chunk
+    #
+    # @return [Array] the lines that were removed from the original
+    def removed_lines
+      processed_lines_of_types('-')
+    end
+
+    # Return an array of lines that were added to the original version of the chunk
+    #
+    # @return [Array] the lines that were added to the original
+    def added_lines
+      processed_lines_of_types('+')
+    end
+
     # Return an array of lines that are present in the modified version of the chunk
     #
     # @return [Array] the lines in the modified version of the chunk
     def modified_lines
-      @raw_lines.select {|line| line[0] == ' ' || line[0] == '+' }.map {|line| line[1..-1] }
+      processed_lines_of_types(' ','+')
     end
 
     # Return an array of lines that are present in the original version of the chunk
     #
     # @return [Array] the lines in the original version of the chunk
     def original_lines
-      @raw_lines.select {|line| line[0] == ' ' || line[0] == '-' }.map {|line| line[1..-1] }
+      processed_lines_of_types(' ','-')
     end
 
   private
+    def processed_lines_of_types(*types)
+      @raw_lines.select {|line| types.include?(line[0])}.map {|line| line[1..-1]}
+    end
+
    # Insert a new addition line into the list of lines for this chunk
     #
     # @param [String] the line to be inserted (without '+' tag)
