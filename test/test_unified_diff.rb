@@ -105,4 +105,36 @@ class TestUnifiedDiff < MiniTest::Unit::TestCase
     @chunk = @diff.chunks.first
     assert_equal (1...2), @chunk.modified_range
   end
+
+  # For files:
+  # odd_line_original
+  # containing one line:
+  # foo
+  #
+  # and 
+  # odd_line_modified
+  # containing five lines:
+  # foo
+  # bar
+  # Baz
+  # qux
+  # quux
+  def test_handles_one_element_origin_chunk_range
+    diff = <<-DIFF.unindent
+      --- original.txt	2012-09-06 16:56:08.320483113 -0400
+      +++ modified.txt	2012-09-06 16:56:44.488483939 -0400
+      @@ -1 +1,5 @@
+       foo
+      +bar
+      +Baz
+      +qux
+      +quux
+    DIFF
+    @diff = UnifiedDiff.parse(diff)
+    @chunk = @diff.chunks.first
+    assert_equal (1...2), @chunk.original_range
+    assert_equal (1...6), @chunk.modified_range
+    assert_equal 0, @chunk.removed_lines.length
+    assert_equal 4, @chunk.added_lines.length
+  end
 end
