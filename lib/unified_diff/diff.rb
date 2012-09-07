@@ -8,10 +8,19 @@ module UnifiedDiff
     OLD_FILE_PATTERN =  /--- #{FILE_PATTERN}/
     NEW_FILE_PATTERN =  /\+\+\+ #{FILE_PATTERN}/
     # Match assignment is tricky for CHUNK_PATTERN
-    # $1,$2 are static, but $3,$4,$5 vary
-    # if pattern is X,Y then $3 = X,Y, $4 = X, $5 = Y
-    # if pattern is X   then $3 = X
-    CHUNK_PATTERN =     /@@ -(\d+),(\d+) \+((\d+),(\d+)|(\d+)) @@/ 
+    # $1 and $3 are static, but $2 and $4 can be nil
+    #
+    # "In many versions of GNU diff, each range can omit the comma and 
+    #  trailing value s, in which case s defaults to 1. Note that the 
+    #  only really interesting value is the l line number of the first 
+    #  range; all the other values can be computed from the diff." 
+    #      -- http://en.wikipedia.org/wiki/Diff#Unified_format
+    #
+    # Pattern -W,X +Y,Z has $1 = W, $2 = X,   $3 = Y, $4 = Z
+    # Pattern -W +Y,Z   has $1 = W, $2 = nil, $3 = Y, $4 = Z
+    # Pattern -W +Y     has $1 = W, $2 = nil, $3 = Y, $4 = nil
+    # Pattern -W,X +Y   has $1 = W, $2 = X,   $3 = Y, $4 = nil
+    CHUNK_PATTERN =     /@@\s+-(\d+)(?:,(\d+))?\s+\+(\d+)(?:,(\d+))?\s+@@\s*$/ 
     ADDED_PATTERN =     /^\+(.*)/
     REMOVED_PATTERN =   /^-(.*)/
     UNCHANGED_PATTERN = /^ (.*)/
@@ -44,13 +53,16 @@ module UnifiedDiff
           @modified_file, @modified_timestamp = $1, Time.parse($2)
         when CHUNK_PATTERN
           old_begin = $1.to_i
-          old_end = old_begin + $2.to_i
-          if $3.include?(',') # Will match if non-edge case encountered
-            new_begin = $4.to_i
-            new_end = new_begin + $5.to_i
+          if $2.nil?
+            old_end = old_begin + 1
           else
-            new_begin = $3.to_i
-            new_end = new_begin + 1
+            old_end = old_begin + $2.to_i
+          end
+          new_begin = $3.to_i
+          if $4.nil?
+            new_end = new_begin+1
+          else
+            new_end = new_begin + $4.to_i
           end
           @working_chunk = Chunk.new(original: (old_begin...old_end), modified: (new_begin...new_end))
           @chunks << @working_chunk
