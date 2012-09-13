@@ -5,7 +5,7 @@ class TestUnifiedDiff < MiniTest::Unit::TestCase
     @original = <<-DIFF.unindent
       --- original.txt	2011-05-31 11:14:13.000000000 -0500
       +++ modified.txt	2011-05-31 11:14:44.000000000 -0500
-      @@ -1,5 +1,5 @@
+      @@ -1,5 +1,5 @@ Optional Text goes here.
        foo
        bar
       -baz
@@ -136,5 +136,36 @@ class TestUnifiedDiff < MiniTest::Unit::TestCase
     assert_equal (1...6), @chunk.modified_range
     assert_equal 0, @chunk.removed_lines.length
     assert_equal 4, @chunk.added_lines.length
+  end
+
+  def test_handles_chunks_within_chunks
+    # Hand modified git diff -U of this file to create this diff.
+    # The git version of unified does not have a timestamp after
+    # the filename.
+    # 
+    # The lines:
+    # --- a/test/test_unified_diff.rb	2012-09-06 16:56:08.320483113 -0400
+    # +++ b/test/test_unified_diff.rb	2012-09-06 16:56:44.488483939 -0400
+    # are really supposed to be:
+    # --- a/test/test_unified_diff.rb
+    # +++ b/test/test_unified_diff.rb
+    # That may well be a new issue.
+    diff = <<-DIFF.unindent
+      --- a/test/test_unified_diff.rb	2012-09-06 16:56:08.320483113 -0400
+      +++ b/test/test_unified_diff.rb	2012-09-06 16:56:44.488483939 -0400
+      @@ -5,7 +5,7 @@ class TestUnifiedDiff < MiniTest::Unit::TestCase
+       @original = <<-DIFF.unindent
+       --- original.txt 2011-05-31 11:14:13.000000000 -0500
+       +++ modified.txt 2011-05-31 11:14:44.000000000 -0500
+      -      @@ -1,5 +1,5 @@
+      +      @@ -1,5 +1,5 @@ Optional Text goes here.
+              foo
+              bar
+             -baz
+    DIFF
+    @diff = UnifiedDiff.parse(diff)
+    @chunk = @diff.chunks.first
+    assert_equal (5...12), @chunk.original_range
+    assert_equal (5...12), @chunk.modified_range
   end
 end
