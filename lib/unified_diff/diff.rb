@@ -20,7 +20,7 @@ module UnifiedDiff
     # Pattern -W +Y,Z   has $1 = W, $2 = nil, $3 = Y, $4 = Z
     # Pattern -W +Y     has $1 = W, $2 = nil, $3 = Y, $4 = nil
     # Pattern -W,X +Y   has $1 = W, $2 = X,   $3 = Y, $4 = nil
-    CHUNK_PATTERN =     /@@\s+-(\d+)(?:,(\d+))?\s+\+(\d+)(?:,(\d+))?\s+@@\s*$/ 
+    CHUNK_PATTERN =     /^@@\s+-(\d+)(?:,(\d+))?\s+\+(\d+)(?:,(\d+))?\s+@@/ 
     ADDED_PATTERN =     /^\+(.*)/
     REMOVED_PATTERN =   /^-(.*)/
     UNCHANGED_PATTERN = /^ (.*)/
