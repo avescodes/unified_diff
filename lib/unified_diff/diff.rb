@@ -69,10 +69,6 @@ module UnifiedDiff
         when ADDED_PATTERN
           @working_chunk.send(:insert_addition, $1)
         when REMOVED_PATTERN
-          if @working_chunk.nil?
-            puts $1
-            puts line
-          end
           @working_chunk.send(:insert_removal, $1)
         when UNCHANGED_PATTERN
           @working_chunk.send(:insert_unchanged, $1)
