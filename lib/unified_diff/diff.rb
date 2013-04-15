@@ -4,7 +4,7 @@ module UnifiedDiff
     attr_reader :original, :original_file, :original_timestamp, :modified_file, :modified_timestamp, :chunks
     class UnifiedDiffException < Exception; end
 
-    FILE_PATTERN =      /(.*)\t'{2}?(.*)'{2}?/
+    FILE_PATTERN =      /([^\t\n]+)(?:\t'{2}?([^']+)'{2}?)?/
     OLD_FILE_PATTERN =  /--- #{FILE_PATTERN}/
     NEW_FILE_PATTERN =  /\+\+\+ #{FILE_PATTERN}/
     # Match assignment is tricky for CHUNK_PATTERN
@@ -48,9 +48,11 @@ module UnifiedDiff
       @original.each_line do |line|
         case line
         when OLD_FILE_PATTERN
-          @original_file, @original_timestamp = $1, Time.parse($2)
+          @original_file = $1
+          @original_timestamp = Time.parse($2) if $2
         when NEW_FILE_PATTERN
-          @modified_file, @modified_timestamp = $1, Time.parse($2)
+          @modified_file = $1
+          @modified_timestamp = Time.parse($2) if $2
         when CHUNK_PATTERN
           old_begin = $1.to_i
           if $2.nil?
