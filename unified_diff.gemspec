@@ -4,14 +4,14 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{unified_diff}
-  s.version = "0.3.2"
+  s.name = "unified_diff"
+  s.version = "0.3.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ryan Neufeld"]
-  s.date = %q{2011-06-01}
-  s.description = %q{unified_diff parses unified diff contents into easy-to-use Ruby objects}
-  s.email = %q{ryan@ryanneufeld.ca}
+  s.date = "2013-04-16"
+  s.description = "unified_diff parses unified diff contents into easy-to-use Ruby objects"
+  s.email = "ryan@ryanneufeld.ca"
   s.extra_rdoc_files = [
     "LICENSE.txt",
     "README.rdoc"
@@ -32,29 +32,26 @@ Gem::Specification.new do |s|
     "test/test_unified_diff.rb",
     "unified_diff.gemspec"
   ]
-  s.homepage = %q{http://github.com/rkneufeld/unified_diff}
+  s.homepage = "http://github.com/rkneufeld/unified_diff"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.6.2}
-  s.summary = %q{Parse unified diffs in style}
+  s.rubygems_version = "1.8.24"
+  s.summary = "Parse unified diffs in style"
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<minitest>, [">= 0"])
-      s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.6.0"])
       s.add_development_dependency(%q<simplecov>, [">= 0"])
     else
       s.add_dependency(%q<minitest>, [">= 0"])
-      s.add_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_dependency(%q<jeweler>, ["~> 1.6.0"])
       s.add_dependency(%q<simplecov>, [">= 0"])
     end
   else
     s.add_dependency(%q<minitest>, [">= 0"])
-    s.add_dependency(%q<bundler>, ["~> 1.0.0"])
     s.add_dependency(%q<jeweler>, ["~> 1.6.0"])
     s.add_dependency(%q<simplecov>, [">= 0"])
   end
