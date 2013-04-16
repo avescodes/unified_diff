@@ -25,6 +25,42 @@ class TestUnifiedDiff < MiniTest::Unit::TestCase
     assert_equal Time.parse('2011-05-31 11:14:13.000000000 -0500'), @diff.original_timestamp
   end
 
+  def test_parses_original_information_with_single_quotes
+    original = <<-DIFF.unindent
+      --- original.txt	''2011-05-31 11:14:13.000000000 -0500''
+      +++ modified.txt	''2011-05-31 11:14:44.000000000 -0500''
+      @@ -1,5 +1,5 @@ Optional Text goes here.
+       foo
+       bar
+      -baz
+      +Baz
+       qux
+       quux
+    DIFF
+    diff = UnifiedDiff.parse(original)
+
+    assert_equal "modified.txt", diff.modified_file
+    assert_equal Time.parse('2011-05-31 11:14:44.000000000 -0500'), diff.modified_timestamp
+  end
+
+  def test_parses_original_information_without_dates
+    original = <<-DIFF.unindent
+      --- original.txt
+      +++ modified.txt
+      @@ -1,5 +1,5 @@ Optional Text goes here.
+       foo
+       bar
+      -baz
+      +Baz
+       qux
+       quux
+    DIFF
+    diff = UnifiedDiff.parse(original)
+
+    assert_equal "modified.txt", diff.modified_file
+    assert_nil diff.modified_timestamp
+  end
+
   def test_parses_modified_filename
     assert_equal "modified.txt", @diff.modified_file
     assert_equal Time.parse('2011-05-31 11:14:44.000000000 -0500'), @diff.modified_timestamp
