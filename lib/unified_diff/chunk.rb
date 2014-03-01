@@ -58,7 +58,7 @@ module UnifiedDiff
       @raw_lines.select {|line| types.include?(line[0])}.map {|line| line[1..-1]}
     end
 
-   # Insert a new addition line into the list of lines for this chunk
+    # Insert a new addition line into the list of lines for this chunk
     #
     # @param [String] the line to be inserted (without '+' tag)
     # @return [Array] the new list of raw lines
@@ -80,6 +80,17 @@ module UnifiedDiff
     # @return [Array] the new list of raw lines
     def insert_unchanged(line)
       @raw_lines << " #{line}"
+    end
+
+    # Insert a no newline at end of file line into the list of lines for this
+    # chunk
+    #
+    # http://www.gnu.org/software/diffutils/manual/html_node/Incomplete-Lines.html
+    #
+    # @param [String] the line to be inserted (without '\' tag)
+    # @return [Array] the new list of raw lines
+    def insert_no_newline_at_eof(line)
+      @raw_lines << "\\#{line}"
     end
 
   end

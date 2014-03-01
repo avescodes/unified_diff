@@ -24,6 +24,7 @@ module UnifiedDiff
     ADDED_PATTERN =     /^\+(.*)/
     REMOVED_PATTERN =   /^-(.*)/
     UNCHANGED_PATTERN = /^ (.*)/
+    NO_NEWLINE_PATTERN = /^\\(\s+No\s+newline\s+at\s+end\s+of\s+file)$/
 
     # Create and parse a unified diff
     #
@@ -74,6 +75,8 @@ module UnifiedDiff
           @working_chunk.send(:insert_removal, $1)
         when UNCHANGED_PATTERN
           @working_chunk.send(:insert_unchanged, $1)
+        when NO_NEWLINE_PATTERN
+          @working_chunk.send(:insert_no_newline_at_eof, $1)
         else
           raise UnifiedDiffException.new("Unknown Line Type for Line:\n#{line}")
         end

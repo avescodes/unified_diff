@@ -204,4 +204,25 @@ class TestUnifiedDiff < MiniTest::Unit::TestCase
     assert_equal (5...12), @chunk.original_range
     assert_equal (5...12), @chunk.modified_range
   end
+
+  def test_no_newline_at_eof
+    header = <<-HEADER.unindent
+      --- a   2014-02-26 16:19:13.000000000 -0800
+      +++ b   2014-02-26 16:19:13.000000000 -0800
+    HEADER
+
+    chunk = <<-'CHUNK'.unindent
+      @@ -1,1 +1,1 @@
+      -noel
+      \ No newline at end of file
+      +noll
+      \ No newline at end of file
+    CHUNK
+
+    @diff = UnifiedDiff.parse(header + chunk)
+    @chunk = @diff.chunks.first
+    assert_equal chunk, @chunk.to_s
+    assert_equal ["noel"], @chunk.original_lines
+    assert_equal ["noll"], @chunk.modified_lines
+  end
 end
