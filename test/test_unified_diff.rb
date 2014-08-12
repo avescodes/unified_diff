@@ -207,8 +207,8 @@ class TestUnifiedDiff < MiniTest::Unit::TestCase
 
   def test_no_newline_at_eof
     header = <<-HEADER.unindent
-      --- a   2014-02-26 16:19:13.000000000 -0800
-      +++ b   2014-02-26 16:19:13.000000000 -0800
+      --- a	2014-02-26 16:19:13.000000000 -0800
+      +++ b	2014-02-26 16:19:13.000000000 -0800
     HEADER
 
     chunk = <<-'CHUNK'.unindent
@@ -225,4 +225,47 @@ class TestUnifiedDiff < MiniTest::Unit::TestCase
     assert_equal ["noel"], @chunk.original_lines
     assert_equal ["noll"], @chunk.modified_lines
   end
+
+  def test_pluses
+    header = <<-HEADER.unindent
+      --- a	2014-07-26 21:44:41.068596411 -0700
+      +++ b	2014-08-03 05:18:34.411245070 -0700
+    HEADER
+
+    chunk = <<-'CHUNK'.unindent
+      @@ -0,0 +1,5 @@
+      ++++++++ ++++++ +++
+      ++ some heading
+      + stuff +++++++++ stuff
+      ++++ a
+      +some body
+    CHUNK
+
+    @diff = UnifiedDiff.parse(header + chunk)
+    @chunk = @diff.chunks.first
+    assert_equal chunk, @chunk.to_s
+    assert_equal 5, @chunk.added_lines.length
+  end
+
+  def test_hyphens
+    header = <<-HEADER.unindent
+      --- a	2014-07-26 21:44:41.068596411 -0700
+      +++ b	2014-08-03 05:18:34.411245070 -0700
+    HEADER
+
+    chunk = <<-'CHUNK'.unindent
+      @@ -1,5 +0,0 @@
+      -------- ------ ---
+      -- some heading
+      - stuff --------- stuff
+      ---- a
+      -some body
+    CHUNK
+
+    @diff = UnifiedDiff.parse(header + chunk)
+    @chunk = @diff.chunks.first
+    assert_equal chunk, @chunk.to_s
+    assert_equal 5, @chunk.removed_lines.length
+  end
+
 end

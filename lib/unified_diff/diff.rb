@@ -5,8 +5,8 @@ module UnifiedDiff
     class UnifiedDiffException < Exception; end
 
     FILE_PATTERN =      /([^\t\n]+)(?:\t'{2}?([^']+)'{2}?)?/
-    OLD_FILE_PATTERN =  /--- #{FILE_PATTERN}/
-    NEW_FILE_PATTERN =  /\+\+\+ #{FILE_PATTERN}/
+    OLD_FILE_PATTERN =  /^--- #{FILE_PATTERN}/
+    NEW_FILE_PATTERN =  /^\+\+\+ #{FILE_PATTERN}/
     # Match assignment is tricky for CHUNK_PATTERN
     # $1 and $3 are static, but $2 and $4 can be nil
     #
