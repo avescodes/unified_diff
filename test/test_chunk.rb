@@ -1,6 +1,6 @@
 require 'helper'
 
-class TestChunk < MiniTest::Unit::TestCase
+class TestChunk < Minitest::Test
   def setup
     @chunk = UnifiedDiff::Chunk.new(original: (1..2), modified: (1..3))
   end

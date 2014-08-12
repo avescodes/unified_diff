@@ -1,6 +1,6 @@
 require 'helper'
 
-class TestUnifiedDiff < MiniTest::Unit::TestCase
+class TestUnifiedDiff < Minitest::Test
   def setup
     @original = <<-DIFF.unindent
       --- original.txt	2011-05-31 11:14:13.000000000 -0500
@@ -147,7 +147,7 @@ class TestUnifiedDiff < MiniTest::Unit::TestCase
   # containing one line:
   # foo
   #
-  # and 
+  # and
   # odd_line_modified
   # containing five lines:
   # foo
@@ -178,7 +178,7 @@ class TestUnifiedDiff < MiniTest::Unit::TestCase
     # Hand modified git diff -U of this file to create this diff.
     # The git version of unified does not have a timestamp after
     # the filename.
-    # 
+    #
     # The lines:
     # --- a/test/test_unified_diff.rb	2012-09-06 16:56:08.320483113 -0400
     # +++ b/test/test_unified_diff.rb	2012-09-06 16:56:44.488483939 -0400
@@ -189,7 +189,7 @@ class TestUnifiedDiff < MiniTest::Unit::TestCase
     diff = <<-DIFF.unindent
       --- a/test/test_unified_diff.rb	2012-09-06 16:56:08.320483113 -0400
       +++ b/test/test_unified_diff.rb	2012-09-06 16:56:44.488483939 -0400
-      @@ -5,7 +5,7 @@ class TestUnifiedDiff < MiniTest::Unit::TestCase
+      @@ -5,7 +5,7 @@ class TestUnifiedDiff < Minitest::Test
        @original = <<-DIFF.unindent
        --- original.txt 2011-05-31 11:14:13.000000000 -0500
        +++ modified.txt 2011-05-31 11:14:44.000000000 -0500
