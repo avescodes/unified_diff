@@ -22,6 +22,13 @@ class String
   end
 end
 
+module TestHelpers
+  def assert_nothing_raised
+    yield
+  end
+end
+Minitest::Test.send(:include, TestHelpers)
+
 require 'simplecov'
 SimpleCov.start do
   add_filter "/test/"
