@@ -126,6 +126,66 @@ class TestUnifiedDiff < Minitest::Test
     assert_equal 2, @diff.chunks.length
   end
 
+  def test_parses_chunk_multiple_lines
+    diff = <<-DIFF.unindent
+      --- original.txt 2015-03-18 15:11:20.000000000 +0800
+      +++ modified.txt 2015-03-18 15:11:18.000000000 +0800
+      @@ -36,12 +36,12 @@
+             minitest (~> 5.1)
+             thread_safe (~> 0.3, >= 0.3.4)
+             tzinfo (~> 1.1)
+      -    addressable (2.3.6)
+      +    addressable (2.3.7)
+           arel (6.0.0)
+           binding_of_caller (0.7.2)
+             debug_inspector (>= 0.0.1)
+           builder (3.2.2)
+      -    bullet (4.14.3)
+      +    bullet (4.14.4)
+             activesupport (>= 3.0.0)
+             uniform_notifier (>= 1.6.0)
+           byebug (4.0.2)
+      @@ -56,7 +56,7 @@
+           columnize (0.9.0)
+           debug_inspector (0.0.2)
+           erubis (2.7.0)
+      -    eventmachine (1.0.6)
+      +    eventmachine (1.0.7)
+           execjs (2.4.0)
+           globalid (0.3.3)
+             activesupport (>= 4.1.0)
+      @@ -76,7 +76,7 @@
+             mime-types (>= 1.16, < 3)
+           mime-types (2.4.3)
+           mini_portile (0.6.2)
+      -    minitest (5.5.0)
+      +    minitest (5.5.1)
+           multi_json (1.11.0)
+           nokogiri (1.6.6.2)
+             mini_portile (~> 0.6.0)
+      @@ -151,14 +151,14 @@
+         ruby
+
+       DEPENDENCIES
+      -  addressable (= 2.3.6)
+      -  bullet (= 4.14.3)
+      +  addressable (= 2.3.7)
+      +  bullet (= 4.14.4)
+         byebug
+         coffee-rails (~> 4.1.0)
+      -  eventmachine (= 1.0.6)
+      +  eventmachine (= 1.0.7)
+         jbuilder (~> 2.0)
+         jquery-rails
+      -  minitest (= 5.5.0)
+      +  minitest (= 5.5.1)
+         rails (= 4.2.0)
+         sass-rails (~> 5.0)
+         sdoc (~> 0.4.0)
+    DIFF
+    assert_nothing_raised { UnifiedDiff.parse(diff) }
+  end
+
   def test_to_s
     assert_equal @original, @diff.to_s
   end
